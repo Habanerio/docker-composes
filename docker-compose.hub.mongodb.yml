@@ -1,0 +1,22 @@
+services:
+   mongodb:
+      image: mongo:latest # 8
+      container_name: mongo
+      hostname: mongo
+      restart: unless-stopped
+      environment:
+         MONGO_INITDB_ROOT_USERNAME: ${MONGO_ADMIN_USERNAME}
+         MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ADMIN_PASSWORD}
+         TZ: ${TZ}
+      ports:
+         - 27017:27017
+      volumes:
+         - ${DOCKER_DATA}/mongodb/data:/data/db
+         - ${DOCKER_DATA}/mongodb/config:/configdb
+      logging:
+         driver: 'json-file'
+         options:
+            max-size: '5m'
+            max-file: '10'
+      networks:
+         - jarvis

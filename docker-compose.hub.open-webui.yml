@@ -1,0 +1,22 @@
+services:
+   open-webui:
+      image: ghcr.io/open-webui/open-webui:latest
+      container_name: webui
+      hostname: webui
+      restart: unless-stopped
+      depends_on:
+         - ollama
+      environment:
+         - OLLAMA_BASE_URL=http://ollama:11434
+         - WEBUI_SECRET_KEY=${WEBUI_SECRET_KEY}
+      ports:
+         - 3101:8080
+      volumes:
+         - ${DOCKER_DATA}/open-webui:/app/backend/data
+      logging:
+         driver: 'json-file'
+         options:
+            max-size: '5m'
+            max-file: '10'
+      networks:
+         - jarvis

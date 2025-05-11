@@ -1,0 +1,31 @@
+services:
+   ollama:
+      image: ollama/ollama:latest
+      container_name: ollama
+      hostname: ollama
+      restart: unless-stopped
+      deploy:
+         resources:
+            reservations:
+               devices:
+                  - driver: nvidia
+                    count: 1
+                    capabilities: [gpu]
+      environment:
+         - HOME=/root
+         - TZ=${TZ}
+      ports:
+         - 11434:11434
+      tty: true
+      user: root
+      volumes:
+         - ${ML_DATA}/ollama:/root/.ollama
+         - /lib64:/lib64:ro
+         - /lib/x86_64-linux-gnu:/lib/x86_64-linux-gnu:ro
+      logging:
+         driver: 'json-file'
+         options:
+            max-size: '5m'
+            max-file: '10'
+      networks:
+         - jarvis

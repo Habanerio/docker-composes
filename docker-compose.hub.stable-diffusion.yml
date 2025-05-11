@@ -1,0 +1,35 @@
+services:
+   stable-diffusion-webui:
+      image: universonic/stable-diffusion-webui:minimal
+      container_name: stable_diffusion
+      hostname: sd
+      #    command: --xformers --api --listen --no-half
+      command: --xformers --api --listen
+      environment:
+         # Prevents memory fragmentation.
+         - PYTORCH_CUDA_ALLOC_CONF=max_split_size_mb:512
+      runtime: nvidia
+      restart: unless-stopped
+      ports:
+         - '7860:8080/tcp'
+      volumes:
+         - ${DOCKER_DATA}/stable-diffusion/inputs:/app/stable-diffusion-webui/inputs
+         - ${DOCKER_DATA}/stable-diffusion/textual_inversion:/app/stable-diffusion-webui/textual_inversion_templates
+         - ${DOCKER_DATA}/stable-diffusion/embeddings:/app/stable-diffusion-webui/embeddings
+         - ${DOCKER_DATA}/stable-diffusion/extensions:/app/stable-diffusion-webui/extensions
+         - ${ML_DATA}/stable-diffusion/models:/app/stable-diffusion-webui/models
+         - ${DOCKER_DATA}/stable-diffusion/localizations:/app/stable-diffusion-webui/localizations
+         - ${DOCKER_DATA}/stable-diffusion/outputs:/app/stable-diffusion-webui/outputs
+      deploy:
+         resources:
+            reservations:
+               devices:
+                  - driver: nvidia
+                    capabilities: [gpu]
+      logging:
+         driver: 'json-file'
+         options:
+            max-size: '5m'
+            max-file: '10'
+      networks:
+         - jarvis

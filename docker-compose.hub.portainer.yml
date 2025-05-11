@@ -1,0 +1,23 @@
+services:
+   portainer:
+      image: portainer/portainer-ce:latest
+      container_name: portainer
+      hostname: portainer
+      restart: always
+      command: -H unix:///var/run/docker.sock
+      environment:
+         - TZ=${TZ}
+      ports:
+         - 9100:9000
+      privileged: true
+      volumes:
+         - /var/run/docker.sock:/var/run/docker.sock
+         - ${DOCKER_DATA}/portainer/data:/data
+         - ${DOCKER_DATA}/shared:/shared
+      logging:
+         driver: 'json-file'
+         options:
+            max-size: '5m'
+            max-file: '10'
+      networks:
+         - jarvis

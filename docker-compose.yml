@@ -1,0 +1,33 @@
+# Include the other Compose files
+include:
+   - ./docker-compose.hub.portainer.yml
+   - ./docker-compose.hub.coder.yml
+   - ./docker-compose.hub.milvus.yml
+   #- ./docker-compose.hub.minio.yml
+   - ./docker-compose.hub.mongodb.yml
+   - ./docker-compose.hub.n8n.yml
+   - ./docker-compose.hub.ollama.yml
+   - ./docker-compose.hub.open-webui.yml
+   - ./docker-compose.hub.qdrant.yml
+   - ./docker-compose.hub.rabbitmq.yml
+   - ./docker-compose.hub.redis.yml
+   - ./docker-compose.hub.stable-diffusion.yml
+
+   - ./supabase/docker/docker-compose-local.yml
+   # Projects
+   - ./docker-compose.hub.wp.yml
+   #- ./bolt.diy/docker-compose-local.yml
+
+# logging:
+#    driver: 'json-file'
+#    options:
+#       max-size: '5m'
+#    max-file: '10'
+
+networks:
+   jarvis:
+      name: jarvis
+   wordpress:
+      name: wordpress
+   coder:
+      name: coder

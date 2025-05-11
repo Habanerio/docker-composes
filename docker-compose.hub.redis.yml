@@ -1,0 +1,36 @@
+services:
+   redis-insight:
+      image: redislabs/redisinsight:latest
+      container_name: redis-insights
+      hostname: redis-insights
+      depends_on:
+         - redis-stack
+      ports:
+         - 9101:8001
+         - 5530:5530
+         - 5540:5540
+      volumes:
+         - ${DOCKER_DATA}/redis-insight:/db
+      restart: unless-stopped
+      networks:
+         - jarvis
+
+   redis-stack:
+      image: redis/redis-stack-server:latest
+      container_name: redis
+      hostname: redis
+      ports:
+         - 6379:6379
+      volumes:
+         - ${DOCKER_DATA}/redis:/data
+      environment:
+         REDIS_ARGS: --requirepass ${REDIS_PASSWORD}
+         TZ: ${TZ}
+      restart: unless-stopped
+      logging:
+         driver: 'json-file'
+         options:
+            max-size: '5m'
+            max-file: '10'
+      networks:
+         - jarvis
